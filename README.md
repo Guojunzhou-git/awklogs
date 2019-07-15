@@ -13,7 +13,7 @@ Usage: awklogs [--option=value] [...]
                 remote_addr_count       output how many requests every remote_addr makes
 ```
 ## examples
-### remote_addr_count
+### 1. remote_addr_count
 output how many requests every remote_addr makes
 ```linux
  ./awklogs.sh --log_type=nginx.access --log_file=./test/teacher.cd.singsound.com_access.log --ana_action=remote_addr_count
