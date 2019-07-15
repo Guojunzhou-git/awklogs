@@ -27,7 +27,7 @@ echo_usage_of_awklogs(){
     echo -e '\t--log_file'
     echo -e '\t\t/path/to/xxx.log\tinput path of log file'
     echo -e '\t--ana_action'
-    echo -e '\t\tremote_addr_count\toutput each row with format json'
+    echo -e '\t\tremote_addr_count\toutput how many requests every remote_addr makes'
     exit 0
 }
 
