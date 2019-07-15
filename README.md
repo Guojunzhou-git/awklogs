@@ -1,7 +1,7 @@
 # awklogs
 Using awk to analyze various log files, such as: nginx.access.log, nginx.error.log
 
-### usage:
+## usage:
 ```linux
 Usage: awklogs [--option=value] [...]
         --log_type
@@ -12,6 +12,7 @@ Usage: awklogs [--option=value] [...]
         --ana_action
                 remote_addr_count       output how many requests every remote_addr makes
 ```
+
 ## examples
 ### 1. remote_addr_count
 output how many requests every remote_addr makes
