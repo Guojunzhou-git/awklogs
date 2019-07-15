@@ -3,6 +3,7 @@
 awklogs_params_log_type=''
 awklogs_params_log_file=''
 awklogs_params_ana_action=''
+awklogs_params_output_limit=10
 
 # parse awklogs prams into var
 parse_awklogs_params(){
@@ -14,6 +15,8 @@ parse_awklogs_params(){
             awklogs_params_log_file=${i#--log_file=}
         elif [ $(echo $i | cut -c1-12) == '--ana_action' ] ; then
             awklogs_params_ana_action=${i#--ana_action=}
+        elif [ $(echo $i | cut -c1-14) == '--output_limit' ] ; then
+            awklogs_params_output_limit=${i#--output_limit=}
         fi
     done
 }
@@ -28,6 +31,8 @@ echo_usage_of_awklogs(){
     echo -e '\t\t/path/to/xxx.log\tinput path of log file'
     echo -e '\t--ana_action'
     echo -e '\t\tremote_addr_count\toutput how many requests every remote_addr makes'
+    echo -e '\t--output_limit'
+    echo -e '\t\t10\t\t\thow many result output, default 10'
     exit 0
 }
 
@@ -58,7 +63,7 @@ if [ -z $awklogs_params_ana_action ] ; then
     exit 1
 elif [ $awklogs_params_ana_action == 'remote_addr_count' ] ; then
     echo -e "---------------------\nremote_addr\tcount\n---------------------"
-    awk -F '"' '{split($1, rbarr, " ");split($2, reqarr, " ");split($3, hrbarr, " ");row["remote_addr"]=rbarr[1];row["remote_user"]=rbarr[3];row["time_local"]=rbarr[4]" "rbarr[5];row["request_method"]=reqarr[1];row["request_uri"]=reqarr[2];row["request_scheme"]=reqarr[3];row["status"]=hrbarr[1];row["body_bytes_sent"]=hrbarr[2];row["http_referer"]=$4;row["http_user_agent"]=$6;row["http_x_forwarded_for"]=$8;row["upstream_response_time"]=$10;row["request_time"]=$12;remote_addr_arr[row["remote_addr"]]++;}END{for(k in remote_addr_arr){ print k"\t"remote_addr_arr[k];}}' $awklogs_params_log_file | sort -n -r -k 2 | head -n 10
+     awk -F '"' '{split($1, rbarr, " ");split($2, reqarr, " ");split($3, hrbarr, " ");row["remote_addr"]=rbarr[1];row["remote_user"]=rbarr[3];row["time_local"]=rbarr[4]" "rbarr[5];row["request_method"]=reqarr[1];row["request_uri"]=reqarr[2];row["request_scheme"]=reqarr[3];row["status"]=hrbarr[1];row["body_bytes_sent"]=hrbarr[2];row["http_referer"]=$4;row["http_user_agent"]=$6;row["http_x_forwarded_for"]=$8;row["upstream_response_time"]=$10;row["request_time"]=$12;remote_addr_arr[row["remote_addr"]]++;}END{for(k in remote_addr_arr){ print k"\t"remote_addr_arr[k];}}' $awklogs_params_log_file | sort -n -r -k 2 | head -n $awklogs_params_output_limit
 fi
 # log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
 #                   '$status $body_bytes_sent "$http_referer" '
