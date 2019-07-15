@@ -31,6 +31,7 @@ echo_usage_of_awklogs(){
     echo -e '\t\t/path/to/xxx.log\tinput path of log file'
     echo -e '\t--ana_action'
     echo -e '\t\tremote_addr_count\toutput how many requests every remote_addr makes'
+    echo -e '\t\trequest_uri_count\toutput how many times every uri been requested'
     echo -e '\t--output_limit'
     echo -e '\t\t10\t\t\thow many result output, default 10'
     exit 0
