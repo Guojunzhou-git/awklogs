@@ -2,7 +2,7 @@
 Using awk to analyze various log files, such as: nginx.access.log, nginx.error.log
 
 ### usage:
-```sh
+```shell
 Usage: awklogs [--option=value] [...]
         --log_type
                 nginx.access            analysis nginx.access.log
