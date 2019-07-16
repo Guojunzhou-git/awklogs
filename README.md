@@ -21,7 +21,7 @@ Usage: awklogs [--option=value] [...]
 ```
 
 ## examples
-### 1. remote_addr_count
+### 1. request_uri based analysis
 analysis access.log file based on request_uri field
 ```linux
 awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=request_uri
@@ -38,7 +38,7 @@ request_uri                     total   status  count   <100ms  <200ms  <500ms  
                                         499     4       0       0       0       2       0       2       
 ----------------------------------------------------------------------------------------------------------------
 ```
-### 2. request_uri_count
+### 2. remote_addr based analysis
 analysis access.log file based on remote_addr field
 ```linux
 awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=remote_addr
