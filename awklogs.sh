@@ -30,16 +30,14 @@ echo_usage_of_awklogs(){
     echo -e '\t--log_file'
     echo -e '\t\t/path/to/xxx.log\tinput path of log file'
     echo -e '\t--analysis_field'
-    echo -e '\t\trequest_uri\t\tanalysis log file based on request_uri field, give result of:'
+    echo -e '\t\trequest_uri\t\tanalysis access.log file based on request_uri field, give result of:'
     echo -e '\t\t\t\t\t- 1. how mant request every uri makes'
     echo -e '\t\t\t\t\t- 2. how mant request with every http code'
     echo -e '\t\t\t\t\t- 3. request_time time_range with every http_code'
-    echo -e '\t\tremote_addr\t\tanalysis log file based on remote_addr field, give result of:'
+    echo -e '\t\tremote_addr\t\tanalysis access.log file based on remote_addr field, give result of:'
     echo -e '\t\t\t\t\t- 1. how mant remote_addr have sent request'
     echo -e '\t\t\t\t\t- 2. how many request every remote_addr makes'
     echo -e '\t\t\t\t\t- 3. how many bytes every remote_addr used'
-    echo -e '\t--output_limit'
-    echo -e '\t\t10\t\t\thow many result output, default 10'
     exit 0
 }
 
@@ -161,8 +159,8 @@ awk -v analysis_field=$awklogs_params_ana_field -F '"' '
                         }
                     }
                 }
-                ORS = "\n"
-                print ""
+                ORS = "\n";
+                print "";
             }
         }
         if(analysis_field == "request_uri"){
