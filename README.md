@@ -14,6 +14,7 @@ Usage: awklogs [--option=value] [...]
                 remote_addr_count       output how many requests every remote_addr makes
                 remote_addr_bytes_sum   output how many bytes every remote_addr used
                 request_uri_count       output how many times every uri been requested
+                request_uri_status      output how many times every uri been requested with http status
         --output_limit
                 10                      how many result output, default 10
 ```
@@ -55,4 +56,17 @@ remote_addr_bytes       bytes_sum       human_sum
 60.191.38.77            546857          534.04 KB
 180.163.220.3           418317          408.513 KB
 180.163.220.66          414069          404.364 KB
+```
+### 4. request_uri_status
+output how many times every uri been requested with http status
+```linux
+./awklogs.sh --log_type=nginx.access --log_file=./test/teacher.cd.singsound.com_access.log --ana_action=request_uri_status --output_limit=5
+------------------------------------------------------
+request_uri     code    count
+------------------------------------------------------
+/       200     2345
+/list.php       200     2174
+/main.php       200     1970
+/sync.php       200     620
+/cleverassign.php       200     439
 ```
