@@ -11,13 +11,17 @@ Usage: awklogs [--option=value] [...]
                 /path/to/xxx.log        input path of log file
         --analysis_field
                 request_uri             analysis access.log file based on request_uri field, give result of:
-                                        - 1. how mant request every uri makes
-                                        - 2. how mant request with every http code
+                                        - 1. how many request every uri makes
+                                        - 2. how many request with every http code
                                         - 3. request_time time_range with every http_code
                 remote_addr             analysis access.log file based on remote_addr field, give result of:
-                                        - 1. how mant remote_addr have sent request
+                                        - 1. how many remote_addr have sent request
                                         - 2. how many request every remote_addr makes
                                         - 3. how many bytes every remote_addr used
+                time_local              analysis access.log file based on time_local field, give result of:
+                                        - 1. how many request every second makes(concurrency)
+                                        - 2. when comes the top N concurrency
+                                        - 3. QPS of every seconds
 ```
 
 ## examples
@@ -49,4 +53,19 @@ remote_addr     request byte_sum        human_sum
 183.136.190.62  102     3097813         2.9543 MB       
 112.124.3.0     65      0               0 B     
 222.92.255.178  57      251073          245.188 KB      
+```
+### 3. time_local based analysis
+analysis access.log file based on time_local field
+```linux
+awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=time_local
+------------------------------------------------------------------
+datetime                concurrency     avg_time(ms)    QPS
+------------------------------------------------------------------
+2019-06-04 02:40:47     28              0               -
+2019-06-06 03:43:26     18              0               -
+2019-05-20 17:43:54     7               45.5714         153
+2019-05-20 17:43:55     7               41.5714         168
+2019-05-20 17:43:56     7               36.1429         193
+2019-05-28 09:49:14     6               77.8333         77
+```
 ```
