@@ -5,6 +5,7 @@ awklogs_params_log_file=''
 awklogs_params_ana_field=''
 awklogs_params_filter_timestamp_start=0
 awklogs_params_filter_timestamp_end=0
+os_platform=`uname -s`
 
 # parse awklogs prams into var
 parse_awklogs_params(){
@@ -21,9 +22,17 @@ parse_awklogs_params(){
         elif [ $(echo $i | cut -c1-22) == '--filter_timestamp_end' ] ; then
             awklogs_params_filter_timestamp_end=${i#--filter_timestamp_end=}
         elif [ $(echo $i | cut -c1-23) == '--filter_datetime_start' ] ; then
-            awklogs_params_filter_timestamp_start=`date -j -f "%Y-%m-%d_%H:%M:%S" ${i#--filter_datetime_start=} +%s`
+            if [[ "${os_platform}" = "Darwin" ]];then
+                awklogs_params_filter_timestamp_start=`date -j -f "%Y-%m-%d_%H:%M:%S" ${i#--filter_datetime_start=} +%s`
+            elif [[ "${os_platform}" = "Linux" ]];then
+                awklogs_params_filter_timestamp_start=`date -d "${i#--filter_datetime_start=}" +%s`
+            fi
         elif [ $(echo $i | cut -c1-21) == '--filter_datetime_end' ] ; then
-            awklogs_params_filter_timestamp_end=`date -j -f "%Y-%m-%d_%H:%M:%S" ${i#--filter_datetime_end=} +%s`
+            if [[ "${os_platform}" = "Darwin" ]];then
+                awklogs_params_filter_timestamp_end=`date -j -f "%Y-%m-%d_%H:%M:%S" ${i#--filter_datetime_end=} +%s`
+            elif [[ "${os_platform}" = "Linux" ]];then
+                awklogs_params_filter_timestamp_end=`date -d "${i#--filter_datetime_end=}" +%s`
+            fi
         fi
     done
 }
