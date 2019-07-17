@@ -24,7 +24,8 @@ Usage: awklogs [--option=value] [...]
                                         - 3. QPS of every seconds
 ```
 
-## examples
+## analysis_field
+analysis log file based on field
 ### 1. request_uri based analysis
 analysis access.log file based on request_uri field
 ```linux
@@ -68,3 +69,5 @@ datetime                concurrency     avg_time(ms)    QPS
 2019-05-20 17:43:56     7               36.1429         193
 2019-05-28 09:49:14     6               77.8333         77
 ```
+## filter
+add condition to filter rows
