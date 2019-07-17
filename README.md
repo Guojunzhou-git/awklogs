@@ -22,6 +22,12 @@ Usage: awklogs [--option=value] [...]
                                         - 1. how many request every second makes(concurrency)
                                         - 2. when comes the top N concurrency
                                         - 3. QPS of every seconds
+        --filter_timestamp_start                add rows filter time_local start, timestamp like 1500000000
+        --filter_timestamp_end          add rows filter time_local end, timestamp like 1500000000,
+                                        ignored when timestamp_end < timestamp_start
+        --filter_datetime_start         add rows filter time_local start, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01
+        --filter_datetime_end           add rows filter time_local end, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01,
+                                        ignored when datetime_end < datetime_start
 ```
 
 ## analysis_field
@@ -71,3 +77,31 @@ datetime                concurrency     avg_time(ms)    QPS
 ```
 ## filter
 add condition to filter rows
+### 1. time_local based filter: timestamp_start & timestamp_end
+second timestamp like 1560000000
+```linux
+awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=remote_addr --filter_timestamp_start=1560000000 --filter_timestamp_end=1561000000
+2009 rows analysised.
+----------------------------------------------------------
+remote_addr     request byte_sum        human_sum
+----------------------------------------------------------
+124.42.59.17    1547    12700363                12.112 MB       
+222.92.255.178  57      251073          245.188 KB      
+117.136.31.217  42      161848          158.055 KB      
+113.88.12.202   42      176401          172.267 KB      
+113.88.14.85    31      169646          165.67 KB      
+```
+### 2. time_local based filter: datetime_start & datetime_end
+datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-06-08_21:20:00
+```linux
+awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=remote_addr --filter_datetime_start=2019-06-08_21:20:00 --filter_datetime_end=2019-06-20_11:06:40
+2009 rows analysised.
+----------------------------------------------------------
+remote_addr     request byte_sum        human_sum
+----------------------------------------------------------
+124.42.59.17    1547    12700363                12.112 MB       
+222.92.255.178  57      251073          245.188 KB      
+117.136.31.217  42      161848          158.055 KB      
+113.88.12.202   42      176401          172.267 KB      
+113.88.14.85    31      169646          165.67 KB    
+```
