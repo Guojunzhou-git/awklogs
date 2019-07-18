@@ -1,5 +1,6 @@
 # awklogs
-Using awk to analyze various log files, such as: nginx.access.log. Bugs Report: php20141104@163.com
+Using awk to analyze nginx.access.log, based on all possible fields.
+Bugs Report: php20141104@163.com
 
 ## usage:
 ```linux
