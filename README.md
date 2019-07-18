@@ -122,5 +122,7 @@ request_uri			total	status	count	<100ms	<200ms	<500ms	<1000ms	<2000ms	>2000ms
 ```
 ## result
 analysis result output
-### analysised rows
+### 1. analysised rows
 output how many rows analysised filtered by `filters`
+### 2. used_time
+output how many seconds used during this analysis
