@@ -120,3 +120,7 @@ request_uri			total	status	count	<100ms	<200ms	<500ms	<1000ms	<2000ms	>2000ms
 					400	1	1	0	0	0	0	0
 ----------------------------------------------------------------------------------------------------------------
 ```
+## result
+analysis result output
+### analysised rows
+output how many rows analysised filtered by `filters`
