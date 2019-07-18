@@ -1,5 +1,5 @@
 # awklogs
-Using awk to analyze various log files, such as: nginx.access.log. Bug Report: php20141104@163.com
+Using awk to analyze various log files, such as: nginx.access.log. Bugs Report: php20141104@163.com
 
 ## usage:
 ```linux
@@ -28,6 +28,7 @@ Usage: awklogs [--option=value] [...]
         --filter_datetime_start         add rows filter time_local start, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01
         --filter_datetime_end           add rows filter time_local end, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01,
                                         ignored when datetime_end < datetime_start
+        --filter_request_uri		only analysis the special REQUEST_URI
 ```
 
 ## analysis_field
@@ -77,7 +78,7 @@ datetime                concurrency     avg_time(ms)    QPS
 ```
 ## filter
 add condition to filter rows
-### 1. time_local based filter: timestamp_start & timestamp_end
+### 1. time_local based filter: --filter_timestamp_start & --filter_timestamp_end
 second timestamp like 1560000000
 ```linux
 awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=remote_addr --filter_timestamp_start=1560000000 --filter_timestamp_end=1561000000
@@ -91,7 +92,7 @@ remote_addr     request byte_sum        human_sum
 113.88.12.202   42      176401          172.267 KB      
 113.88.14.85    31      169646          165.67 KB      
 ```
-### 2. time_local based filter: datetime_start & datetime_end
+### 2. time_local based filter: --filter_datetime_start & --filter_datetime_end
 datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-06-08_21:20:00
 ```linux
 awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=remote_addr --filter_datetime_start=2019-06-08_21:20:00 --filter_datetime_end=2019-06-20_11:06:40
@@ -104,4 +105,18 @@ remote_addr     request byte_sum        human_sum
 117.136.31.217  42      161848          158.055 KB      
 113.88.12.202   42      176401          172.267 KB      
 113.88.14.85    31      169646          165.67 KB    
+```
+### 3. request_uri based filter: --filter_request_uri
+only analysis the special REQUEST_URI
+```linux
+awklogs.sh --log_type=nginx.access --log_file=test/api2.cd.singsound.com_access.log --analysis_field=request_uri --filter_request_uri=/business/frontDynamic/Config
+3982 rows analysised. <1 seconds used.
+----------------------------------------------------------------------------------------------------------------
+request_uri			total	status	count	<100ms	<200ms	<500ms	<1000ms	<2000ms	>2000ms
+----------------------------------------------------------------------------------------------------------------
+/business/frontDynamic/Config	3982
+					200	3976	40	3676	12	0	0	248
+					499	5	2	3	0	0	0	0
+					400	1	1	0	0	0	0	0
+----------------------------------------------------------------------------------------------------------------
 ```
