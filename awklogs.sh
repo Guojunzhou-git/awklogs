@@ -5,6 +5,7 @@ awklogs_params_log_file=''
 awklogs_params_ana_field=''
 awklogs_params_filter_timestamp_start=0
 awklogs_params_filter_timestamp_end=0
+awklogs_params_filter_request_uri=''
 os_platform=`uname -s`
 
 # parse awklogs prams into var
@@ -21,6 +22,8 @@ parse_awklogs_params(){
             awklogs_params_filter_timestamp_start=${i#--filter_timestamp_start=}
         elif [ $(echo $i | cut -c1-22) == '--filter_timestamp_end' ] ; then
             awklogs_params_filter_timestamp_end=${i#--filter_timestamp_end=}
+        elif [ $(echo $i | cut -c1-20) == '--filter_request_uri' ] ; then
+            awklogs_params_filter_request_uri=${i#--filter_request_uri=}
         elif [ $(echo $i | cut -c1-23) == '--filter_datetime_start' ] ; then
             if [[ "${os_platform}" = "Darwin" ]];then
                 awklogs_params_filter_timestamp_start=`date -j -f "%Y-%m-%d_%H:%M:%S" ${i#--filter_datetime_start=} +%s`
@@ -64,6 +67,7 @@ echo_usage_of_awklogs(){
     echo -e '\t--filter_datetime_start\t\tadd rows filter time_local start, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01'
     echo -e '\t--filter_datetime_end\t\tadd rows filter time_local end, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01,'
     echo -e '\t\t\t\t\tignored when datetime_end < datetime_start'
+    echo -e '\t--filter_request_uri\t\tonly analysis the special REQUEST_URI'
     exit 0
 }
 
@@ -100,6 +104,7 @@ check_necessary_params
 awk -v analysis_field=$awklogs_params_ana_field \
     -v filter_timestamp_start=$awklogs_params_filter_timestamp_start \
     -v filter_timestamp_end=$awklogs_params_filter_timestamp_end \
+    -v filter_request_uri=$awklogs_params_filter_request_uri \
     -F '"' '
     BEGIN{
         SUBSEP = "|"
@@ -110,6 +115,7 @@ awk -v analysis_field=$awklogs_params_ana_field \
         begin_time_range["1000_200"] = 1;
         begin_time_range["2000_infinite"] = 1;
         begin_analysis_rows = 0;
+        analysis_start_time = systime();
     }
     {
         split($1, rbarr, " ");
@@ -144,6 +150,9 @@ awk -v analysis_field=$awklogs_params_ana_field \
             if(row_filtered == 0 && filter_timestamp_end > 0 && row_timestamp > filter_timestamp_end){
                 row_filtered = 1;
             }
+        }
+        if(row_filtered == 0 && filter_request_uri && row["request_uri"] != filter_request_uri){
+            row_filtered = 1;
         }
         if(row_filtered == 0){
             if(analysis_field == "time_local"){
@@ -183,8 +192,13 @@ awk -v analysis_field=$awklogs_params_ana_field \
         }
     }
     END{
+        analysis_end_time = systime();
+        analysis_used_time = int(analysis_end_time-analysis_start_time);
+        if(analysis_used_time == 0){
+            analysis_used_time = "<1";
+        }
         ORS = ""
-        print begin_analysis_rows" rows analysised."
+        print begin_analysis_rows" rows analysised. "analysis_used_time" seconds used."
         if(begin_analysis_rows == 0){
             print "no result output."
         }
