@@ -1,4 +1,4 @@
-![awklogs](https://repository-images.githubusercontent.com/196912371/506b7700-aa4b-11e9-9f0a-e75d14919b41 "awklogs")
+![awklogs](https://repository-images.githubusercontent.com/196912371/e7383380-aa4b-11e9-8401-f7534261074d "awklogs")
 # awklogs
 Using awk to analyze nginx.access.log, based on all possible fields.<br/>Bugs Report: php20141104@163.com
 ## usage:
