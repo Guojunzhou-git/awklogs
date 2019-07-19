@@ -32,20 +32,20 @@ Usage: awklogs [--option=value] [...]
 	--filter_request_uri		only analysis the special REQUEST_URI
 ```
 ## log type
-### --log_type=nginx.access
+### 1. --log_type=nginx.access
 analysis nginx.access.log based on default nginx log formay.
 ```linux
 log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
                   '$status $body_bytes_sent "$http_referer" '
                   '"$http_user_agent" "$http_x_forwarded_for" "$upstream_response_time" "$request_time"';
 ```
-### --log_type=json
+### 2. --log_type=json
 analysis json format log file.
 > based on [JSON.awk](https://github.com/step-/JSON.awk). thanks for [JSON.awk](https://github.com/step-/JSON.awk)
 
 ## analysis_field
 analysis log file based on field
-### 1. request_uri based analysis
+### 1. request_uri based analysis [--log_type=nginx.access]
 analysis access.log file based on request_uri field
 ```linux
 awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=request_uri
@@ -62,7 +62,7 @@ request_uri                     total   status  count   <100ms  <200ms  <500ms  
                                         499     4       0       0       0       2       0       2       
 ----------------------------------------------------------------------------------------------------------------
 ```
-### 2. remote_addr based analysis
+### 2. remote_addr based analysis [--log_type=nginx.access]
 analysis access.log file based on remote_addr field
 ```linux
 awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=remote_addr
@@ -74,7 +74,7 @@ remote_addr     request byte_sum        human_sum
 112.124.3.0     65      0               0 B     
 222.92.255.178  57      251073          245.188 KB      
 ```
-### 3. time_local based analysis
+### 3. time_local based analysis [--log_type=nginx.access]
 analysis access.log file based on time_local field
 ```linux
 awklogs.sh --log_type=nginx.access --log_file=test/teacher.cd.singsound.com_access.log --analysis_field=time_local
@@ -87,6 +87,27 @@ datetime                concurrency     avg_time(ms)    QPS
 2019-05-20 17:43:55     7               41.5714         168
 2019-05-20 17:43:56     7               36.1429         193
 2019-05-28 09:49:14     6               77.8333         77
+```
+### 4. json field count analysis [--log_type=json]
+analysis json format log file based on `function` field.
+```linux
+awklogs.sh --log_type=json --log_file=test/log_10000.json --analysis_field=function
+------------------------------------------------
+field					count
+------------------------------------------------
+"event_upload_offline_evalute_audio_...	6341
+"send"                                  1145
+"start"                                 919
+"on_event_dev_status_result"            634
+"on_message"                            420
+"handle"                                420
+"event_submit_answers_run"              58
+"event_submit_category_run"             58
+"on_connect"                            2
+"do_answer_submit_post"                 2
+"on_disconnect"                         1
+------------------------------------------------
+10000 rows analysised, 0 rows ignored. 6 seconds used.
 ```
 ## filter
 add condition to filter rows
