@@ -1,35 +1,47 @@
 # awklogs
 Using awk to analyze nginx.access.log, based on all possible fields.<br/>Bugs Report: php20141104@163.com
-
 ## usage:
 ```linux
-awklogs.sh 
+awklogs.sh
 Usage: awklogs [--option=value] [...]
-        --log_type
-                nginx.access            analysis nginx.access.log
-        --log_file
-                /path/to/xxx.log        input path of log file
-        --analysis_field
-                request_uri             analysis access.log file based on request_uri field, give result of:
-                                        - 1. how many request every uri makes
-                                        - 2. how many request with every http code
-                                        - 3. request_time time_range with every http_code
-                remote_addr             analysis access.log file based on remote_addr field, give result of:
-                                        - 1. how many remote_addr have sent request
-                                        - 2. how many request every remote_addr makes
-                                        - 3. how many bytes every remote_addr used
-                time_local              analysis access.log file based on time_local field, give result of:
-                                        - 1. how many request every second makes(concurrency)
-                                        - 2. when comes the top N concurrency
-                                        - 3. QPS of every seconds
-        --filter_timestamp_start                add rows filter time_local start, timestamp like 1500000000
-        --filter_timestamp_end          add rows filter time_local end, timestamp like 1500000000,
-                                        ignored when timestamp_end < timestamp_start
-        --filter_datetime_start         add rows filter time_local start, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01
-        --filter_datetime_end           add rows filter time_local end, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01,
-                                        ignored when datetime_end < datetime_start
-        --filter_request_uri		only analysis the special REQUEST_URI
+	--log_type
+		nginx.access		analysis nginx.access.log
+		json			analysis json format file
+	--log_file
+		/path/to/xxx.log	input path of log file
+	--analysis_field
+		request_uri		analysis access.log file based on request_uri field, give result of:
+					- 1. how many request every uri makes
+					- 2. how many request with every http code
+					- 3. request_time time_range with every http_code
+		remote_addr		analysis access.log file based on remote_addr field, give result of:
+					- 1. how many remote_addr have sent request
+					- 2. how many request every remote_addr makes
+					- 3. how many bytes every remote_addr used
+		time_local		analysis access.log file based on time_local field, give result of:
+					- 1. how many request every second makes(concurrency)
+					- 2. when comes the top N concurrency
+					- 3. QPS of every seconds
+		xxx			analysis json format file, analysis_field need to be given
+	--filter_timestamp_start		add rows filter time_local start, timestamp like 1500000000
+	--filter_timestamp_end		add rows filter time_local end, timestamp like 1500000000,
+					ignored when timestamp_end < timestamp_start
+	--filter_datetime_start		add rows filter time_local start, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01
+	--filter_datetime_end		add rows filter time_local end, datetime with format "%Y-%m-%d_%H:%M:%S" like 2019-01-01_01:01:01,
+					ignored when datetime_end < datetime_start
+	--filter_request_uri		only analysis the special REQUEST_URI
 ```
+## log type
+### --log_type=nginx.access
+analysis nginx.access.log based on default nginx log formay.
+```linux
+log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                  '$status $body_bytes_sent "$http_referer" '
+                  '"$http_user_agent" "$http_x_forwarded_for" "$upstream_response_time" "$request_time"';
+```
+### --log_type=json
+analysis json format log file.
+> based on [JSON.awk](https://github.com/step-/JSON.awk). thanks for [JSON.awk](https://github.com/step-/JSON.awk)
 
 ## analysis_field
 analysis log file based on field
